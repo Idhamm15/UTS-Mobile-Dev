@@ -1,16 +1,10 @@
-# ucommerce_apps
+# Ucommerce Apps
+Aplikasi untuk penjualan produk fashion
 
-A new Flutter project.
+## Feature
+- Login
+- Register
+- View Product
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Integration Backend
+- [Backend]https://github.com/Idhamm15/UTS-BE-Mobile-Dev.git
