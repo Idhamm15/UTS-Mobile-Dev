@@ -1,6 +1,7 @@
 import 'package:ucommerce_apps/bloc/product/bloc/product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ucommerce_apps/main.dart' as main;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,9 +14,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
 Widget build(BuildContext context) {
+  
   return Scaffold(
+    drawer: main.NavigationDrawer(),
     appBar: AppBar(
-      title: const Text("Api Calling From a Bloc dd"),
+      title: const Text("Belanja Harian"),
       centerTitle: true,
     ),
     body: BlocBuilder<ProductBloc, ProductState>(
