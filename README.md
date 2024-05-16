@@ -9,7 +9,7 @@ Aplikasi untuk penjualan produk fashion
     ![Alt Text](documentations/login_screen.png)
 
 - Register
-    ![Alt Text](documentations/register_screen.png)
+    ![Alt Text](documentations/register.png)
 
 - View Product
     ![Alt Text](documentations/product.png)
