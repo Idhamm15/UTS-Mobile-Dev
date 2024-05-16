@@ -1,40 +1,96 @@
-import 'package:ucommerce_apps/bloc/product/bloc/product_bloc.dart';
-import 'package:ucommerce_apps/data/repository/api_repository.dart';
-import 'package:ucommerce_apps/data/service/data_repository.dart';
-import 'package:ucommerce_apps/presentation/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ucommerce_apps/bloc/login/bloc/login_bloc.dart';
+import 'package:ucommerce_apps/bloc/product/bloc/product_bloc.dart';
+import 'package:ucommerce_apps/bloc/register/bloc/register_bloc.dart';
+import 'package:ucommerce_apps/bloc/users/bloc/users_bloc.dart';
+import 'package:ucommerce_apps/data/repository/repositories.dart';
+import 'package:ucommerce_apps/data/service/data_repository.dart';
+import 'package:ucommerce_apps/data/repository/api_repository.dart';
 import 'package:ucommerce_apps/presentation/screen/login_screen.dart';
 import 'package:ucommerce_apps/presentation/screen/register_screen.dart';
-
+import 'package:ucommerce_apps/presentation/screen/splash_screen.dart';
+import 'package:ucommerce_apps/presentation/screen/home_screen.dart';
 
 void main() {
-  runApp(MyApp(
-    dataService: DataService(),
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final DataService dataService;
-  const MyApp({super.key, required this.dataService}) : super();
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Bloc Api',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          useMaterial3: true,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(create: (context) => UserRepository()),
+        RepositoryProvider(create: (context) => ApiRepository(dataService: DataService())),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (BuildContext context) => UserBloc(
+              RepositoryProvider.of<UserRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (BuildContext context) => LoginBloc(
+              RepositoryProvider.of<UserRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (BuildContext context) => ProductBloc(
+              apiRepository: RepositoryProvider.of<ApiRepository>(context),
+            )..add(LoadProductEvent()),
+          ),
+          BlocProvider(
+            create: (BuildContext context) => RegisterBloc(
+              userRepository: RepositoryProvider.of<UserRepository>(context),
+            ),
+          ),
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Ucommerce Apps',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: const SplashScreen(),
+          routes: {
+            '/login': (context) => const LoginScreen(),
+            '/register': (context) => RegisterScreen(),
+            '/home': (context) => const HomeScreen(),
+          },
         ),
-        home: BlocProvider(
-          create: (context) => ProductBloc(
-            apiRepository: ApiRepository(dataService: dataService),
-          )..add(LoadProductEvent()),
-          child: HomeScreen(),
-        ));
+      ),
+    );
   }
 }
+
+
+
+
+// class MyApp extends StatelessWidget {
+//   final DataService dataService;
+//   const MyApp({super.key, required this.dataService}) : super();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//         debugShowCheckedModeBanner: false,
+//         title: 'Flutter Bloc Api',
+//         theme: ThemeData(
+//           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+//           useMaterial3: true,
+//         ),
+//         home: BlocProvider(
+//           create: (context) => ProductBloc(
+//             apiRepository: ApiRepository(dataService: dataService),
+//           )..add(LoadProductEvent()),
+//           child: LoginScreen(),
+//         ));
+//   }
+// }
 
 
 

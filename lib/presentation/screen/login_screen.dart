@@ -1,100 +1,141 @@
 import 'package:flutter/material.dart';
-// import 'package:ucommerce_apps/presentation/screen/home_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ucommerce_apps/bloc/login/bloc/login_bloc.dart';
+import 'package:ucommerce_apps/bloc/login/bloc/login_event.dart';
+import 'package:ucommerce_apps/bloc/login/bloc/login_state.dart';
+import 'package:ucommerce_apps/data/model/users_model.dart';
+import 'package:ucommerce_apps/presentation/screen/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  static String tag = 'login-page';
+  const LoginScreen({Key? key}) : super(key: key);
+
   @override
-  _LoginScreenState createState() => new _LoginScreenState();
+  State<LoginScreen> createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen> {
+  final emailController = TextEditingController(text: 'heyy@gmail.com');
+  final passwordController = TextEditingController(text: 'testing123');
+  String errorMessage = '';
+
   @override
-  
   Widget build(BuildContext context) {
-    final logo = Hero(
-      tag: 'hero',
-      child: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        radius: 100.0,
-        child: Image.asset('assets/images/icon.png'),
-      ),
-    );
-
-    final email = TextFormField(
-      keyboardType: TextInputType.emailAddress,
-      autofocus: false,
-      // initialValue: 'alucard@gmail.com',
-      decoration: InputDecoration(
-        hintText: 'Email',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-      ),
-    );
-
-    final password = TextFormField(
-      autofocus: false,
-      // initialValue: 'some password',
-      obscureText: true,
-      decoration: InputDecoration(
-        hintText: 'Password',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-      ),
-    );
-final loginButton = Padding(
-  padding: EdgeInsets.symmetric(vertical: 16.0),
-  child: ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-      ),
-      backgroundColor: Colors.lightBlueAccent,
-    ),
-    onPressed: () {
-      // Navigator.of(context).pushNamed(HomePage.tag);
-    },
-    child: Text('Log In', style: TextStyle(color: Colors.white)),
-  ),
-);
-
-final forgotLabel = TextButton(
-  onPressed: () {},
-  child: Text(
-    'Forgot password?',
-    style: TextStyle(color: Colors.black54),
-  ),
-);
-
-
     return Scaffold(
-      
-      backgroundColor: Colors.white,
-      
-      body: Center(
-        
-        child: ListView(
-          
-          shrinkWrap: true,
-          padding: EdgeInsets.only(left: 24.0, right: 24.0),
-          children: <Widget>[
-
-            logo,
-            SizedBox(height: 15.0),
-            // Align(
-            //   alignment: Alignment.centerLeft,
-            //   child: Text(
-            //     "Selamat Datang Kembali !!",
-            //     // style: theme.textTheme.headlineSmall,
-            //   ),
-            // ),
-            SizedBox(height: 15.0),
-            email,
-            SizedBox(height: 8.0),
-            password,
-            SizedBox(height: 24.0),
-            loginButton,
-            forgotLabel
-          ],
+      appBar: AppBar(
+        // title: const Text("Email Screen"),
+      ),
+      body: BlocListener<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state is LoginLoadedState) {
+            UserModel usuario = state.user;
+            Navigator.pushReplacementNamed(context, '/home');
+          } else if (state is LoginErrorState) {
+            setState(() {
+              errorMessage = state.error;
+            });
+          }
+        },
+        child: BlocBuilder<LoginBloc, LoginState>(
+          builder: (context, state) {
+            if (state is LoginInitial || state is LoginErrorState) {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 50.0),
+                    CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      radius: 100.0,
+                      child: Image.asset('assets/images/icon.png'),
+                    ),
+                    const SizedBox(height: 30.0),
+                    if (errorMessage.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                        child: Text(
+                          errorMessage,
+                          style: const TextStyle(color: Colors.red, fontSize: 14),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    const SizedBox(height: 10.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                      child: TextFormField(
+                        controller: emailController,
+                        decoration: InputDecoration(
+                          icon: const Icon(Icons.person),
+                          hintText: 'Masukan Email',
+                          labelText: 'Email *',
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(32.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                      child: TextFormField(
+                        controller: passwordController,
+                        decoration: InputDecoration(
+                          icon: const Icon(Icons.lock),
+                          hintText: 'Masukan Password',
+                          labelText: 'Password *',
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(32.0),
+                          ),
+                        ),
+                        obscureText: true,
+                      ),
+                    ),
+                    const SizedBox(height: 25.0),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        backgroundColor: Colors.lightBlueAccent,
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        minimumSize: const Size(200, 15),
+                      ),
+                      onPressed: () {
+                        BlocProvider.of<LoginBloc>(context).add(
+                          LoadLoginEvent(
+                            emailController.text,
+                            passwordController.text,
+                          ),
+                        );
+                      },
+                      child: const Text("Login"),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Belum punya akun?"),
+                        TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegisterScreen()), // Ganti SignUpScreen() dengan halaman pendaftaran yang sesuai
+                      );
+                    },
+                    child: const Text("Buat akun"),
+                    ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            } else if (state is LoginLoadingState) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return Container();
+            }
+          },
         ),
       ),
     );
