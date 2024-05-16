@@ -2,20 +2,21 @@
 Aplikasi untuk penjualan produk fashion
 
 ## Feature
-- Spalash Screen
-    ![Alt Text](documentations/splash_screen.png)
+
+### Spalash Screen
+<img alt="Contribution call-to-action" src="documentations/splash_screen.png" width="400">
     
-- Login
-    ![Alt Text](documentations/login_screen.png)
+### Login
+<img alt="Contribution call-to-action" src="documentations/login_screen.png" width="400">
 
-- Register
-    ![Alt Text](documentations/register.png)
+### Register
+<img alt="Contribution call-to-action" src="documentations/register.png" width="400">
 
-- View Product
-    ![Alt Text](documentations/product.png)
+### View Product
+<img alt="Contribution call-to-action" src="documentations/product.png" width="400">
 
-- View Product
-    ![Alt Text](documentations/product2.png)
+### View Product 2
+<img alt="Contribution call-to-action" src="documentations/product2.png" width="400">
 
 ## Integration Backend
 - [Backend]https://github.com/Idhamm15/UTS-BE-Mobile-Dev.git
